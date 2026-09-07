@@ -3,6 +3,7 @@ package ui
 import (
 	"fmt"
 	"sat_word_list/internal"
+	"strings"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
@@ -28,7 +29,7 @@ func newWordUI(wd fyne.Window) fyne.CanvasObject {
 
 	entry := widget.NewEntry()
 	entry.PlaceHolder = "Enter a new word here"
-	entry.OnChanged = func(s string) { word.Word = s }
+	entry.OnChanged = func(s string) { word.Word = strings.TrimSpace(s) }
 
 	wordTypeSelect := widget.NewSelect([]string{"Noun", "Verb", "Adjective"}, func(s string) {
 		switch s {
@@ -43,7 +44,7 @@ func newWordUI(wd fyne.Window) fyne.CanvasObject {
 
 	descriptionEntry := widget.NewMultiLineEntry()
 	descriptionEntry.PlaceHolder = "Enter description here"
-	descriptionEntry.OnChanged = func(s string) { word.Description = s }
+	descriptionEntry.OnChanged = func(s string) { word.Description = strings.TrimSpace(s) }
 
 	return container.NewPadded(
 		container.NewVBox(
@@ -85,17 +86,22 @@ func newWordCancelButton(wd fyne.Window, word *internal.Vocabulary) fyne.CanvasO
 
 func newWordConfirmButton(wd fyne.Window, word *internal.Vocabulary) fyne.CanvasObject {
 	return widget.NewButton("Confirm", func() {
+		if word == nil {
+			dialog.ShowError(fmt.Errorf("nil pointer provided in newWordConfirmButton!"), wd)
+			return
+		}
+
 		if word.Word == "" || word.WordType == "" || word.Description == "" {
 			dialog.ShowError(fmt.Errorf("Missing field(s)\nWord: %s\nWord Type: %s\nDescription: %s", word.Word, word.WordType, word.Description), wd)
 			return
 		}
 
 		content = append(content, []string{word.Word, word.WordType, word.Description}) // update the table items
-		internal.PendingWords = append(internal.PendingWords, *word)
+		contentForLookup[strings.ToLower(word.Word)] = *word
+		internal.PendingWords[strings.ToLower(word.Word)] = *word
 		UpdateTable(wd)
 		internal.Saved = false
 
-		println(content, internal.PendingWords)
 		wd.Close()
 	})
 }

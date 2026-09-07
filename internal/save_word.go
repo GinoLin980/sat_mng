@@ -24,7 +24,7 @@ func SaveWords() error {
 	return nil
 }
 
-func buildWordsToSave(words []Vocabulary) string {
+func buildWordsToSave(words map[string]Vocabulary) string {
 	result := ""
 
 	for _, word := range words {

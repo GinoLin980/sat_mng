@@ -6,30 +6,31 @@ import (
 	"strings"
 )
 
-// [][]string is 2D array
-func ReadWords(filename string) ([][]string, error) {
+// [][]string is 2D array, because table ui need 2d array data
+func ReadWords(filename string) (map[string]Vocabulary, [][]string, error) {
 	info, err := os.Stat(filename)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	if info.Size() == 0 {
-		return nil, ErrEmptyFile
+		return nil, nil, ErrEmptyFile
 	}
 
 	bytes, err := os.ReadFile(filename)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	content := string(bytes)
 	if content == "" {
-		return nil, ErrEmptyFile
+		return nil, nil, ErrEmptyFile
 	}
 
 	return parse(content)
 }
 
-func parse(content string) ([][]string, error) {
+func parse(content string) (map[string]Vocabulary, [][]string, error) {
+	resultForLookup := map[string]Vocabulary{}
 	result := [][]string{}
 	errText := ""
 	lineNum := 1
@@ -38,6 +39,8 @@ func parse(content string) ([][]string, error) {
 	for line := range strings.Lines(content) {
 		// skip lines without a caracter
 		line := strings.TrimSpace(line)
+		lineNum++
+
 		if line == "" {
 			continue
 		}
@@ -46,17 +49,22 @@ func parse(content string) ([][]string, error) {
 		if len(splited) != 3 {
 			errText += fmt.Sprintf("line %d: invalid word %s\n", lineNum, line)
 		} else {
+			splited[0] = strings.TrimSpace(splited[0])
+			splited[1] = strings.TrimSpace(splited[1])
+			splited[2] = strings.TrimSpace(splited[2])
+			resultForLookup[strings.ToLower(splited[0])] = Vocabulary{
+				Word:        splited[0],
+				WordType:    splited[1],
+				Description: splited[2],
+			}
 			result = append(result, splited)
 		}
-
-		lineNum++
 	}
-
 	if errText == "" {
-		return result, nil
+		return resultForLookup, result, nil
 	}
 
-	return result, fmt.Errorf(
+	return resultForLookup, result, fmt.Errorf(
 		"%w:\n%s",
 		ErrReadInvalidWords,
 		errText,

@@ -9,7 +9,7 @@ import (
 func Buttons(wd fyne.Window, app fyne.App) fyne.CanvasObject {
 	return container.NewHBox(
 		widget.NewButton("New Word", NewWord(app)),
-		widget.NewButton("Check Meaning", nil),
+		widget.NewButton("Check Meaning", Lookup(app)),
 		widget.NewButton("Save", SaveUI(wd)),
 		widget.NewButton("Quit", Quit(wd, app)),
 	)

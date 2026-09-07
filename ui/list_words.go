@@ -12,13 +12,12 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
-var content = [][]string{}
 var table *widget.Table
 
 func ListWords(filename string, wd fyne.Window, app fyne.App) fyne.CanvasObject {
 
 	var err error // prevent using content, err := readwords, as it will create local content var
-	content, err = internal.ReadWords(filename)
+	contentForLookup, content, err = internal.ReadWords(filename)
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
 			// no file found, end of program
