@@ -1,22 +1,18 @@
 package ui
 
 import (
-	"sat_word_list/ui"
-
 	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
 )
 
-// set initial value to true, as unmodified means the disk and ram are synced, which equal to saved
-var saved bool = true
-
-func Buttons(wd fyne.Window, app fyne.App) []fyne.CanvasObject {
-	return []fyne.CanvasObject{
-		widget.NewButton("New Word", nil),
+func Buttons(wd fyne.Window, app fyne.App) fyne.CanvasObject {
+	return container.NewHBox(
+		widget.NewButton("New Word", NewWord(app)),
 		widget.NewButton("Check Meaning", nil),
-		widget.NewButton("Save", nil),
-		widget.NewButton("Quit", ui.Quit(saved, wd, app)),
-	}
+		widget.NewButton("Save", SaveUI(wd)),
+		widget.NewButton("Quit", Quit(wd, app)),
+	)
 }
 
 // 1) To add a new entry.

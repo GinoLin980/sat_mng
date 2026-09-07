@@ -2,10 +2,7 @@ module sat_word_list
 
 go 1.27.0
 
-require (
-	fyne.io/fyne v1.4.3
-	fyne.io/fyne/v2 v2.8.1
-)
+require fyne.io/fyne/v2 v2.8.1
 
 require (
 	fyne.io/systray v1.12.3-0.20260810170012-af4e8e793ec4 // indirect
