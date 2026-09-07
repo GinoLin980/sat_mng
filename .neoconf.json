@@ -1,0 +1,17 @@
+{
+  "neoconf": {
+    "plugins": {
+      "gopls": {
+        "enabled": true,
+        "settings": {
+          "gopls": {
+            "completeUnimported": true,
+            "usePlaceholders": false,
+            "deepCompletion": true,
+            "semanticTokens": false
+          }
+        }
+      }
+    }
+  }
+}

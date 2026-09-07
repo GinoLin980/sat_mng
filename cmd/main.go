@@ -5,6 +5,7 @@ package main
 // ui contains all components
 
 import (
+	"sat_word_list/internal"
 	"sat_word_list/ui"
 
 	"fyne.io/fyne/v2"
@@ -12,8 +13,6 @@ import (
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/layout"
 )
-
-const Filename = "words.dat"
 
 func main() {
 	a := app.New()
@@ -31,7 +30,7 @@ func main() {
 		nil,
 		nil,
 		nil,
-		ui.ListWords("words.dat", wd, a), // center, fills rest of screen
+		ui.ListWords(internal.Filename, wd, a), // center, fills rest of screen
 	))
 
 	// run the program and block the process

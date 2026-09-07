@@ -19,6 +19,8 @@ func SaveWords() error {
 		return err
 	}
 
+	clear(PendingWords)
+
 	Saved = true
 
 	return nil
